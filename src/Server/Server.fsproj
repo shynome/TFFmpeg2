@@ -8,13 +8,28 @@
     <ItemGroup>
         <None Include="paket.references" />
         <Compile Include="..\Shared\Shared.fs" />
+        <Compile Include="Utils.fs" />
+        <Compile Include="Lorca.fs" />
         <Compile Include="Explorer.fs" />
         <Compile Include="FFmpeg.fs" />
         <Compile Include="Store.fs" />
         <Compile Include="App.fs" />
         <Compile Include="Server.fs" />
     </ItemGroup>
+    <PropertyGroup>
+        <CFBundleShortVersionString>2.0.0</CFBundleShortVersionString>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(RuntimeIdentifier)'!=''">
+        <ContentWithTargetPath CopyToOutputDirectory="PreserveNewest" Include="external-bin/$(RuntimeIdentifier)/ffmpeg" TargetPath="external-bin/ffmpeg" />
+        <ContentWithTargetPath CopyToOutputDirectory="PreserveNewest" Include="external-bin/$(RuntimeIdentifier)/lorca" TargetPath="external-bin/lorca" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Release'">
+        <Content CopyToOutputDirectory="PreserveNewest" Include="../Client/deploy/**/*.*" />
+    </ItemGroup>
+
     <ItemGroup>
+      <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
       <PackageReference Include="Fable.RemoteData" Version="1.0.2" />
       <PackageReference Include="FSharp.Control.Reactive" Version="4.3.0" />
       <PackageReference Include="Thoth.Json" Version="4.1.0" />

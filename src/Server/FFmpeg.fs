@@ -7,32 +7,7 @@ open Shared
 open System.Threading
 open FSharp.Control.Reactive
 
-let internalFFmpegPath () =
-    let basedir = System.AppDomain.CurrentDomain.BaseDirectory
-    let basedir = basedir + "external-bin/"
-    if not (Directory.Exists basedir) then "" else
-    let dirs = Directory.GetDirectories(basedir)
-    let dir = dirs.[0]
-    dir
-
-let getFFmpegTryPaths () =
-    let pwd = Directory.GetCurrentDirectory()
-    seq {
-        yield internalFFmpegPath()
-        yield pwd
-        yield Path.Combine(pwd, "external-bin/")
-    }
-
-let FFmpegBin =
-    let dirs = getFFmpegTryPaths ()
-    let dirs =
-        dirs
-        |> Seq.filter (fun d -> d <> "")
-        |> Seq.map (fun d -> Path.Combine(d, "ffmpeg"))
-    let dir = dirs |> Seq.tryFind (fun path->File.Exists(path))
-    match dir with
-    | Some path -> path
-    | None -> ""
+let FFmpegBin = Utils.getBin "ffmpeg"
 
 let getVideMetatdata (file:string) =
     async {
