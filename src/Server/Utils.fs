@@ -1,16 +1,13 @@
 module Utils
 
 open System.IO
+open System
 
 let private internalBinPath () =
-    try
-        let basedir = System.AppDomain.CurrentDomain.BaseDirectory
-        let basedir = basedir + "external-bin/"
-        if not (Directory.Exists basedir) then "" else
-        let dirs = Directory.GetDirectories(basedir)
-        let dir = dirs.[0]
-        dir
-    with _ -> ""
+    let basedir = AppDomain.CurrentDomain.BaseDirectory
+    let basedir = basedir + "external-bin/"
+    if not (Directory.Exists basedir) then ""
+    else basedir
 
 let private getBinTryPaths () =
     let pwd = Directory.GetCurrentDirectory()
