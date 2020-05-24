@@ -2,12 +2,15 @@ module Utils
 
 open System.IO
 open System
+open System.Diagnostics
 
 let private internalBinPath () =
     let basedir = AppDomain.CurrentDomain.BaseDirectory
     let basedir = basedir + "external-bin/"
     if not (Directory.Exists basedir) then ""
     else basedir
+
+let mutable private lock = Map.empty<string,bool>
 
 let private getBinTryPaths () =
     let pwd = Directory.GetCurrentDirectory()
@@ -25,5 +28,11 @@ let getBin name =
         |> Seq.map (fun d -> Path.Combine(d, name))
     let dir = dirs |> Seq.tryFind (fun path->File.Exists(path))
     match dir with
-    | Some path -> path
+    | Some path ->
+        let (v, _) = lock.TryGetValue path
+        if not v then
+            let cmd = Process.Start("chmod","+x "+path)
+            cmd.WaitForExit()
+            lock <- lock.Add(path, true)
+        path
     | None -> ""

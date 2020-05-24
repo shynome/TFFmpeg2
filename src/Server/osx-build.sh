@@ -1,8 +1,10 @@
 set -xe
-dotnet restore -r osx-x64
-exec dotnet msbuild \
-    -t:BundleApp \
-    -p:RuntimeIdentifier=osx-x64 \
-    -p:Configuration=Release \
-    -p:PublishSingleFile=false \
-    -p:PublishTrimmed=true
+dotnet publish \
+    -r osx-x64 \
+    -c Release \
+    -p:PublishSingleFile=true \
+    -P:PublishTrimmed=true
+rm -rf TFFmpeg
+mkdir TFFmpeg
+cp -r bin/Release/netcoreapp3.0/osx-x64/publish/Server TFFmpeg/TFFmpeg
+zip -r TFFmpeg.zip TFFmpeg/

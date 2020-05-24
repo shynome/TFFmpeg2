@@ -49,7 +49,7 @@ Lorca.StartGUI port |> Async.Start
 #endif
 
 let app = application {
-    url ("http://0.0.0.0:" + port.ToString() + "/")
+    url (sprintf "http://127.0.0.1:%i/" port)
     use_router webApp
     memory_cache
     use_static publicPath

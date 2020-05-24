@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <DefineConstants>SERVER</DefineConstants>
+        <SatelliteResourceLanguages>false</SatelliteResourceLanguages>
     </PropertyGroup>
     <ItemGroup>
         <None Include="paket.references" />
