@@ -1,6 +1,7 @@
 module Client
 
 open Elmish
+open Elmish.React
 open Elmish.Bridge
 
 #if DEBUG
@@ -16,7 +17,9 @@ Program.mkProgram App.init App.update App.view
     )
 #if DEBUG
 |> Program.withConsoleTrace
+#endif
 |> Program.withReactBatched "elmish-app"
+#if DEBUG
 |> Program.withDebugger
 #endif
 |> Program.run
