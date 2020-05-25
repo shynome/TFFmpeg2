@@ -28,11 +28,5 @@ let getBin name =
         |> Seq.map (fun d -> Path.Combine(d, name))
     let dir = dirs |> Seq.tryFind (fun path->File.Exists(path))
     match dir with
-    | Some path ->
-        let (v, _) = lock.TryGetValue path
-        if not v then
-            let cmd = Process.Start("chmod","+x "+path)
-            cmd.WaitForExit()
-            lock <- lock.Add(path, true)
-        path
+    | Some path -> path
     | None -> ""
