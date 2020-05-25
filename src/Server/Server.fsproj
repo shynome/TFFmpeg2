@@ -2,12 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <DefineConstants>SERVER</DefineConstants>
         <SatelliteResourceLanguages>false</SatelliteResourceLanguages>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="paket.references" />
         <Compile Include="..\Shared\Shared.fs" />
         <Compile Include="Utils.fs" />
         <Compile Include="Lorca.fs" />
@@ -31,10 +30,13 @@
 
     <ItemGroup>
       <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
+      <PackageReference Include="Elmish.Bridge.Giraffe" Version="3.0.3" />
+      <PackageReference Include="Fable.Core" Version="3.1.5" />
       <PackageReference Include="Fable.RemoteData" Version="1.0.2" />
       <PackageReference Include="FSharp.Control.Reactive" Version="4.3.0" />
+      <PackageReference Include="Saturn" Version="0.13.1" />
       <PackageReference Include="Thoth.Json" Version="4.1.0" />
+      <PackageReference Include="Thoth.Json.Giraffe" Version="4.1.0" />
       <PackageReference Include="xFFmpeg.NET" Version="3.4.0" />
     </ItemGroup>
-    <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
