@@ -10,7 +10,7 @@ let syncClient = Cmd.ofMsg Sync'
 let getMetadata file =
     async {
         let! metadata = FFmpeg.getVideMetatdata file
-        return { Path =file; Metadata = metadata; Progress = Ready; }
+        return { Path =file; Metadata = metadata; Progress = Ready; Option = None }
     }
 
 /// Elmish init function with a channel for sending client messages
@@ -22,6 +22,7 @@ let init clientDispatch () =
         Files = NotAsked
         SelectedVideos = [||]
         Tab = s.Tab
+        EditVideo = None
     }
     let initModel (state:Model) =
         async {
@@ -65,7 +66,7 @@ let update clientDispatch msg model =
     | SetFiles files ->
         { model with Files = files }, syncClient
     | SelectFile file ->
-        let video = { Path =file; Metadata = Loading; Progress = NotReady; }
+        let video = { Path =file; Metadata = Loading; Progress = NotReady; Option = None }
         let videos = Array.append model.SelectedVideos [|video|]
 
         let cmd = Cmd.batch [
@@ -79,9 +80,17 @@ let update clientDispatch msg model =
             video
         )
         {model with SelectedVideos = videos}, syncClient
+    | SetEditVideo video ->
+        {model with EditVideo = video}, syncClient
+    | SaveEditVideo video ->
+        model, Cmd.batch [
+            Cmd.ofMsg (SetVideo video)
+            Cmd.ofMsg (SetEditVideo None)
+        ]
     | UnSelectFile file ->
         let videos = model.SelectedVideos |> Array.filter (fun v -> v.Path <> file)
         {model with SelectedVideos = videos}, syncClient
+// ServerMsg handle
     | Transform v ->
         let s = FFmpeg.transformVideo v
         let v = { v with Progress = s.Value }

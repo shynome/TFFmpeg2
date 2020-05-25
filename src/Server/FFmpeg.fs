@@ -71,9 +71,13 @@ let transformVideo (v:Video) =
 
     let outpath = getOutpath v.Path
 
+    let cmd = "-y -pix_fmt yuv420p"
     let cmd =
-        let cmd = "-y -pix_fmt yuv420p"
-        cmd
+        match v.Option with
+        | None -> cmd
+        | Some m ->
+            let scaleArgs = sprintf " -vf scale=%i:%i" m.Width m.Height
+            cmd + scaleArgs
     let cmd = sprintf "-i %s %s %s" v.Path cmd outpath
 
     f.ExecuteAsync (cmd, t.Token) |> ignore
