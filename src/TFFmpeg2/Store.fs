@@ -11,7 +11,14 @@ type StoreState = {
 }
 
 let getStoreState () =
-    let root = System.Environment.GetEnvironmentVariable("HOME")
+    let root =
+        let root = System.Environment.GetEnvironmentVariable("HOME")
+        let root =
+            if not (isNull root) then root
+            // for windows
+            else System.Environment.GetEnvironmentVariable("USERPROFILE")
+        let root = Explorer.normalizePath root
+        root
     let defaultValue = {
         Root = root
         SelectedVideos = [||]
